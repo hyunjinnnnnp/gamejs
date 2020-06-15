@@ -5,8 +5,11 @@ const moveBtn=document.querySelector(".js-moveBtn")
 let objX=3,
 objY=100;
 
-const dx=.1,
-dy=-.1;
+let dx=1,
+dy=1;
+
+
+const objSize= 20;
 
 function drawRightEyeBall(){
     ctx.beginPath();
@@ -54,11 +57,15 @@ function drawRightLeg(){
 
 function drawObj(){
 ctx.beginPath();
-ctx.rect(objX,objY,20,20);
+ctx.rect(objX,objY,objSize,objSize);
 ctx.fillStyle="#ffc107";
-ctx.fillRect(objX,objY,20,20)
+ctx.fillRect(objX,objY,objSize,objSize)
 ctx.closePath();
+ if(objX + dx < 0  || objX+dx > canvas.width){
+     dx=-dx;
 
+ }
+objX = objX + dx;
 drawLeftLeg();
 drawRightLeg();
 drawLeftEye();
@@ -66,16 +73,24 @@ drawRightEye();
 drawLeftEyeBall();
 drawRightEyeBall();
 }
+function drawRain(){
+    const randomX= Math.floor(Math.random() * canvas.width);
+    const randomY= Math.floor(Math.random() * canvas.height);
 
+    ctx.fillStyle="white"
+    ctx.fillRect(randomX, randomY, 1, 5);
+
+}
 function handleClick(event){
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawObj()
-    objX += dx;
-    setInterval(handleClick, 100);
 }
 
 function init(){
-    
-    moveBtn.addEventListener("click", handleClick)
+    drawRain();
+    moveBtn.addEventListener("click", handleClick);
+    setInterval(handleClick, 1000);
+    setInterval(drawRain, 10000);  
+    // 오브젝 움직일때 스크린 잔상 다 지워지게 했기때문에 비는 출력이 안됨
 }
 init()
